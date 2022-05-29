@@ -45,16 +45,16 @@ export class ViewCartComponent implements OnInit {
   }
 
   getAllData() {
+    // @ts-ignore
+    this.goodService.getLists().subscribe((lists: List[]) => {
+      this.lists = lists;
+    });
+
     this.route.params.subscribe((params: Params) => {
       // @ts-ignore
       this.goodService.getGoods(params['listId']).subscribe((goods: Good[]) => {
         this.goods = goods;
       });
-    });
-
-    // @ts-ignore
-    this.goodService.getLists().subscribe((lists: List[]) => {
-      this.lists = lists;
     });
   }
 
