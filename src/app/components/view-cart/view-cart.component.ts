@@ -42,7 +42,6 @@ export class ViewCartComponent implements OnInit {
     this.route.params.subscribe((params: Params) => {
       this.listId = params['listId'];
     });
-    this.getGoodsData();
   }
 
   getListsData() {
@@ -59,12 +58,10 @@ export class ViewCartComponent implements OnInit {
     // });
   }
 
-  getGoodsData() {
-    this.route.params.subscribe((params: Params) => {
-      // @ts-ignore
-      this.goodService.getGoods(params['listId']).subscribe((goods: Good[]) => {
-        this.goods = goods;
-      });
+  getGoodsData(listId: string) {
+    // @ts-ignore
+    this.goodService.getGoods(listId).subscribe((goods: Good[]) => {
+      this.goods = goods;
     });
   }
 
@@ -84,7 +81,7 @@ export class ViewCartComponent implements OnInit {
     this.goodService.removeGood(good).subscribe(() => {
       this.router
         .navigate(['/lists', this.listId])
-        .then(() => this.getGoodsData());
+        .then(() => this.getGoodsData(this.listId));
     });
   }
 
@@ -140,7 +137,7 @@ export class ViewCartComponent implements OnInit {
         .subscribe(() => {
           this.router
             .navigate(['/lists', this.listId])
-            .then(() => this.getGoodsData());
+            .then(() => this.getGoodsData(this.listId));
         });
     });
   }
@@ -157,7 +154,7 @@ export class ViewCartComponent implements OnInit {
         .subscribe(() => {
           this.router
             .navigate(['/lists', this.listId])
-            .then(() => this.getGoodsData());
+            .then(() => this.getGoodsData(this.listId));
         });
     });
   }
