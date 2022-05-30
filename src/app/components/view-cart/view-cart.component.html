@@ -3,7 +3,7 @@
     <div class="shop-lists">
       <h1 class="shop-lists-title">Shop Lists</h1>
       <div class="shop-lists-content">
-        <a class="shop-lists-item" *ngFor="let list of lists" [routerLink]="['/lists', list._id]" (click)="getGoodsData(list._id)" routerLinkActive="is-active">
+        <a class="shop-lists-item" *ngFor="let list of lists" [routerLink]="['/lists', list._id]" routerLinkActive="is-active">
           <p>{{ list.title }}</p>
         </a>
       </div>

@@ -23,6 +23,7 @@ export interface DialogData {
 })
 export class ViewCartComponent implements OnInit {
   lists: List[];
+  allGoods: Good[];
   goods: Good[];
 
   listId: string;
@@ -39,8 +40,12 @@ export class ViewCartComponent implements OnInit {
 
   ngOnInit(): void {
     this.getListsData();
+    this.getAllGoodsData();
     this.route.params.subscribe((params: Params) => {
-      this.listId = params['listId'];
+      if (params['listId']) {
+        this.listId = params['listId'];
+        this.getGoodsData();
+      }
     });
   }
 
@@ -49,20 +54,22 @@ export class ViewCartComponent implements OnInit {
     this.goodService.getLists().subscribe((lists: List[]) => {
       this.lists = lists;
     });
-
-    // this.route.params.subscribe((params: Params) => {
-    //   // @ts-ignore
-    //   this.goodService.getGoods(params['listId']).subscribe((goods: Good[]) => {
-    //     this.goods = goods;
-    //   });
-    // });
   }
 
-  getGoodsData(listId: string) {
+  getAllGoodsData() {
     // @ts-ignore
-    this.goodService.getGoods(listId).subscribe((goods: Good[]) => {
-      this.goods = goods;
+    this.goodService.getAllGoods().subscribe((goods: Good[]) => {
+      this.allGoods = goods;
     });
+  }
+
+  getGoodsData() {
+    this.goodService
+      .getSpecificGoods(this.listId)
+      // @ts-ignore
+      .subscribe((goods: Good[]) => {
+        this.goods = goods;
+      });
   }
 
   onGoodClick(good: Good) {
@@ -81,7 +88,7 @@ export class ViewCartComponent implements OnInit {
     this.goodService.removeGood(good).subscribe(() => {
       this.router
         .navigate(['/lists', this.listId])
-        .then(() => this.getGoodsData(this.listId));
+        .then(() => this.getGoodsData());
     });
   }
 
@@ -130,14 +137,11 @@ export class ViewCartComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.newGoodTitle = result;
-
       this.goodService
         .createGood(this.listId, this.newGoodTitle)
         // @ts-ignore
         .subscribe(() => {
-          this.router
-            .navigate(['/lists', this.listId])
-            .then(() => this.getGoodsData(this.listId));
+          this.getGoodsData();
         });
     });
   }
@@ -154,7 +158,7 @@ export class ViewCartComponent implements OnInit {
         .subscribe(() => {
           this.router
             .navigate(['/lists', this.listId])
-            .then(() => this.getGoodsData(this.listId));
+            .then(() => this.getGoodsData());
         });
     });
   }
