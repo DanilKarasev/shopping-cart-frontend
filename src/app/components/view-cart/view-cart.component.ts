@@ -48,7 +48,7 @@ export class ViewCartComponent implements OnInit {
             (el) => el._id === params['listId']
           );
           // @ts-ignore
-          this.currentListTitle = currentList.title;
+          this.currentListTitle = currentList?.title;
         }
       });
     });
@@ -131,6 +131,7 @@ export class ViewCartComponent implements OnInit {
         this.router.navigate(['/lists', list._id]).then(() => {
           this.newListTitle = '';
           this.getListsData();
+          this.currentListTitle = result.trim();
         });
       });
     });
@@ -146,9 +147,10 @@ export class ViewCartComponent implements OnInit {
         .editListTitle(listId, newTitle.trim())
         // @ts-ignore
         .subscribe(() => {
-          this.router
-            .navigate(['/lists', this.listId])
-            .then(() => this.getListsData());
+          this.router.navigate(['/lists', this.listId]).then(() => {
+            this.getListsData();
+            this.currentListTitle = newTitle.trim();
+          });
         });
     });
   }

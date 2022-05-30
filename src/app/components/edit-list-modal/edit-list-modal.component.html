@@ -1,6 +1,6 @@
 <div class="modal-container">
   <h3 style="text-align: center">Edit a List</h3>
-  <div>
+  <form>
     <mat-form-field appearance='fill' style="width: 100%">
       <mat-label>List name</mat-label>
       <input
@@ -20,5 +20,5 @@
       <button mat-button color="warn" type="button" (click)="onNoClick()">Close</button>
       <button type='submit' [disabled]="inputTitle.value.length === 0 || inputTitle.value.length > 15" mat-button color="primary" [mat-dialog-close]="data.listTitleToEdit" >Edit</button>
     </div>
-  </div>
+  </form>
 </div>
