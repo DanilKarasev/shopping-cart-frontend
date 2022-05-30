@@ -28,10 +28,6 @@ export class GoodService {
     return this.webReqService.delete(`lists/${id}`);
   }
 
-  getAllGoods() {
-    return this.webReqService.get('lists');
-  }
-
   getSpecificGoods(listId: string) {
     return this.webReqService.get(`lists/${listId}/goods`);
   }

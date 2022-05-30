@@ -23,7 +23,6 @@ export interface DialogData {
 })
 export class ViewCartComponent implements OnInit {
   lists: List[];
-  allGoods: Good[];
   goods: Good[];
 
   listId: string;
@@ -40,7 +39,6 @@ export class ViewCartComponent implements OnInit {
 
   ngOnInit(): void {
     this.getListsData();
-    this.getAllGoodsData();
     this.route.params.subscribe((params: Params) => {
       if (params['listId']) {
         this.listId = params['listId'];
@@ -53,13 +51,6 @@ export class ViewCartComponent implements OnInit {
     // @ts-ignore
     this.goodService.getLists().subscribe((lists: List[]) => {
       this.lists = lists;
-    });
-  }
-
-  getAllGoodsData() {
-    // @ts-ignore
-    this.goodService.getAllGoods().subscribe((goods: Good[]) => {
-      this.allGoods = goods;
     });
   }
 
@@ -103,7 +94,7 @@ export class ViewCartComponent implements OnInit {
       data: { newListTitle: this.newListTitle },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      this.newListTitle = result;
+      this.newListTitle = result.trim();
       // @ts-ignore
       this.goodService.createList(this.newListTitle).subscribe((list: List) => {
         this.router
@@ -120,7 +111,7 @@ export class ViewCartComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((newTitle) => {
       this.goodService
-        .editListTitle(listId, newTitle)
+        .editListTitle(listId, newTitle.trim())
         // @ts-ignore
         .subscribe(() => {
           this.router
@@ -136,7 +127,7 @@ export class ViewCartComponent implements OnInit {
       data: { newGoodTitle: this.newGoodTitle },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      this.newGoodTitle = result;
+      this.newGoodTitle = result.trim();
       this.goodService
         .createGood(this.listId, this.newGoodTitle)
         // @ts-ignore
@@ -153,12 +144,10 @@ export class ViewCartComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((newTitle) => {
       this.goodService
-        .editGoodTitle(good, newTitle)
+        .editGoodTitle(good, newTitle.trim())
         // @ts-ignore
         .subscribe(() => {
-          this.router
-            .navigate(['/lists', this.listId])
-            .then(() => this.getGoodsData());
+          this.getGoodsData();
         });
     });
   }

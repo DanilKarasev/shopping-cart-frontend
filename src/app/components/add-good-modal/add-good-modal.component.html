@@ -1,10 +1,11 @@
 <div class="modal-container">
   <h3 style="text-align: center">Adding a new Good!</h3>
-  <div>
+  <form>
     <mat-form-field appearance='fill' style="width: 100%">
       <mat-label>Good name</mat-label>
       <input
         type="text"
+        [ngModelOptions]="{standalone: true}"
         (keydown)="noFirstSpace($event)"
         [(ngModel)]="data.newGoodTitle"
         #inputTitle
@@ -16,7 +17,7 @@
     </mat-error>
     <div class="button-container">
       <button mat-button color="warn" type="button" (click)="onNoClick()">Close</button>
-      <button [disabled]="inputTitle.value.length === 0 || inputTitle.value.length > 30" mat-button color="primary" [mat-dialog-close]="data.newGoodTitle" >Add Good</button>
+      <button type="submit" [disabled]="inputTitle.value.length === 0 || inputTitle.value.length > 30" mat-button color="primary" [mat-dialog-close]="data.newGoodTitle" >Add Good</button>
     </div>
-  </div>
+  </form>
 </div>
