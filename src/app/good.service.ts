@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WebRequestService } from './web-request.service';
 import { Good } from './models/good.model';
-import { List } from './models/list.model';
 
 @Injectable({
   providedIn: 'root',

@@ -7,7 +7,9 @@
           <p>{{ list.title }}</p>
         </a>
       </div>
-      <button class="list-menu" mat-button [matMenuTriggerFor]="listMenu"> Edit List</button>
+      <button class="list-menu" mat-icon-button [matMenuTriggerFor]="listMenu" aria-label="Example icon-button with a menu">
+        <mat-icon>settings</mat-icon>
+      </button>
       <mat-menu #listMenu="matMenu">
         <button (click)="editListModal(listId)" mat-menu-item>Edit</button>
         <button (click)="onDeleteListClick()" style="color: red" mat-menu-item>Delete</button>
@@ -16,7 +18,7 @@
     </div>
 
     <div class="goods-list">
-      <h1 class="goods-list-title">Goods</h1>
+      <h1 class="goods-list-title">{{ this.currentListTitle }}</h1>
 
 
       <div class="goods-list-content">

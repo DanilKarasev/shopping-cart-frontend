@@ -26,6 +26,7 @@ export class ViewCartComponent implements OnInit {
   goods: Good[];
 
   listId: string;
+  currentListTitle: string;
 
   newListTitle: string;
   newGoodTitle: string;
@@ -37,8 +38,21 @@ export class ViewCartComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
-    this.getListsData();
+  ngOnInit() {
+    // @ts-ignore
+    this.goodService.getLists().subscribe((lists: List[]) => {
+      this.lists = lists;
+      this.route.params.subscribe((params: Params) => {
+        if (params['listId']) {
+          let currentList: Object | undefined = lists.find(
+            (el) => el._id === params['listId']
+          );
+          // @ts-ignore
+          this.currentListTitle = currentList.title;
+        }
+      });
+    });
+
     this.route.params.subscribe((params: Params) => {
       if (params['listId']) {
         this.listId = params['listId'];
@@ -53,6 +67,23 @@ export class ViewCartComponent implements OnInit {
       this.lists = lists;
     });
   }
+
+  loadCurrentListTitle() {
+    let currentList: Object | undefined = this.lists.find(
+      (el) => el._id === this.listId
+    );
+    // @ts-ignore
+    this.currentListTitle = currentList.title;
+  }
+
+  // setListTitleClick() {
+  //   let currentList: Object | undefined = this.lists.find(
+  //     (el) => el._id === this.listId
+  //   );
+  //   console.log(this.currentListTitle);
+  //   // @ts-ignore
+  //   this.currentListTitle = currentList.title;
+  // }
 
   getGoodsData() {
     this.goodService
@@ -97,9 +128,10 @@ export class ViewCartComponent implements OnInit {
       this.newListTitle = result.trim();
       // @ts-ignore
       this.goodService.createList(this.newListTitle).subscribe((list: List) => {
-        this.router
-          .navigate(['/lists', list._id])
-          .then(() => this.getListsData());
+        this.router.navigate(['/lists', list._id]).then(() => {
+          this.newListTitle = '';
+          this.getListsData();
+        });
       });
     });
   }
@@ -132,6 +164,7 @@ export class ViewCartComponent implements OnInit {
         .createGood(this.listId, this.newGoodTitle)
         // @ts-ignore
         .subscribe(() => {
+          this.newGoodTitle = '';
           this.getGoodsData();
         });
     });
